@@ -72,6 +72,7 @@
 - (void)cw_pushViewController:(UIViewController *)vc drewerHiddenDuration:(NSTimeInterval)duration {
     
     CWLateralSlideAnimator *animator = (CWLateralSlideAnimator *)self.transitioningDelegate;
+    animator.configuration.pushTag = YES;
     animator.configuration.HiddenAnimDuration = duration > 0 ? duration : animator.configuration.HiddenAnimDuration;
     UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
     UINavigationController *nav;
@@ -88,17 +89,17 @@
         return;
     }
     
-    NSNumber *direction = objc_getAssociatedObject(self, &CWLateralSlideDirectionKey);
-    NSString *subType = direction.integerValue ? kCATransitionFromLeft : kCATransitionFromRight;
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.20f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-    transition.type = TransitionType;
-    transition.subtype = subType;
-    [nav.view.layer addAnimation:transition forKey:nil];
+//    NSNumber *direction = objc_getAssociatedObject(self, &CWLateralSlideDirectionKey);
+//    NSString *subType = direction.integerValue ? kCATransitionFromLeft : kCATransitionFromRight;
+//    CATransition *transition = [CATransition animation];
+//    transition.duration = 0.20f;
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+//    transition.type = TransitionType;
+//    transition.subtype = subType;
+//    [nav.view.layer addAnimation:transition forKey:nil];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-    [nav pushViewController:vc animated:NO];
+    [nav pushViewController:vc animated:YES];
 }
 
 

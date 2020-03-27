@@ -92,22 +92,36 @@
     if ([containerView.subviews.firstObject isKindOfClass:[UIImageView class]])
         backImageView = containerView.subviews.firstObject;
     
-    [UIView animateKeyframesWithDuration:[self transitionDuration:transitionContext] delay:_hiddenDelayTime options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
-
-        [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:1.0 animations:^{
-            toVC.view.transform = CGAffineTransformIdentity;
-            fromVC.view.transform = CGAffineTransformIdentity;
-            maskView.alpha = 0;
-            backImageView.transform = CGAffineTransformMakeScale(1.4, 1.4);
-        }];
-        
-    } completion:^(BOOL finished) {
+    dispatch_block_t animationBlock = ^{
+        toVC.view.transform = CGAffineTransformIdentity;
+        fromVC.view.transform = CGAffineTransformIdentity;
+        maskView.alpha = 0;
+        backImageView.transform = CGAffineTransformMakeScale(1.4, 1.4);
+    };
+    
+    void(^completionBlock)(BOOL finished) = ^(BOOL finished){
         if (![transitionContext transitionWasCancelled]) {
             maskView.toViewSubViews = nil;
             [CWMaskView releaseInstance];
             [backImageView removeFromSuperview];
         }
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+    };
+    
+    if (self.configuration.pushTag) {
+        animationBlock();
+        completionBlock(YES);
+        return;
+    }
+    
+    [UIView animateKeyframesWithDuration:[self transitionDuration:transitionContext] delay:_hiddenDelayTime options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+
+        [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:1.0 animations:^{
+            animationBlock();
+        }];
+        
+    } completion:^(BOOL finished) {
+        completionBlock(finished);
     }];
 }
 

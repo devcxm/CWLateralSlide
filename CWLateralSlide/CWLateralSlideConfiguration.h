@@ -19,6 +19,8 @@ typedef NS_ENUM(NSUInteger,CWDrawerTransitionDirection) {
 
 @interface CWLateralSlideConfiguration : NSObject
 
+@property (nonatomic, assign) BOOL pushTag;
+
 /**
  根控制器可偏移的距离，默认为屏幕的0.75
  */

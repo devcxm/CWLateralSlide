@@ -16,6 +16,7 @@
 
 - (instancetype)initWithDistance:(float)distance maskAlpha:(float)alpha scaleY:(float)scaleY direction:(CWDrawerTransitionDirection)direction backImage:(UIImage *)backImage {
     if (self = [super init]) {
+        _pushTag = NO;
         _distance = distance;
         _maskAlpha = alpha;
         _direction = direction;
